@@ -1,5 +1,5 @@
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Montserrat:wght@500;600;700;800&display=swap');
 
 @tailwind base;
 @tailwind components;
@@ -53,6 +53,8 @@
 
   body {
     @apply bg-background text-foreground font-sans;
+    background-image: linear-gradient(to bottom, rgba(220, 240, 245, 0.5), rgba(220, 240, 245, 0));
+    background-attachment: fixed;
   }
   
   h1, h2, h3, h4, h5, h6 {
@@ -65,10 +67,47 @@
   }
   
   .resq-card {
-    @apply bg-white rounded-xl shadow-md p-6 border border-resq-100;
+    @apply bg-white rounded-xl shadow-sm p-6 border border-resq-100 transition-all;
   }
   
   .resq-input {
     @apply rounded-lg border border-resq-100 bg-white focus:ring-resq-300 focus:border-resq-300 text-foreground w-full;
   }
+
+  /* Animation utilities */
+  @keyframes pulse-gentle {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+  }
+  
+  .animate-pulse-gentle {
+    animation: pulse-gentle 2s infinite ease-in-out;
+  }
+
+  /* Card hover effects */
+  .hover-card {
+    @apply transition-all duration-200;
+  }
+  
+  .hover-card:hover {
+    @apply shadow-md transform -translate-y-1;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 178, 198, 0.3);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 178, 198, 0.5);
 }
