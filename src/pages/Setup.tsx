@@ -10,7 +10,7 @@ import ContactForm from "../components/ContactForm";
 import Header from "../components/Header";
 import { EmergencyProfile } from "../types";
 import { saveProfile, getProfile, createEmptyProfile } from "../utils/storage";
-import { toast } from "../components/ui/sonner";
+import { toast } from "sonner";
 
 const Setup = () => {
   const [profile, setProfile] = useState<EmergencyProfile>(createEmptyProfile());

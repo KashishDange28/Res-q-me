@@ -13,7 +13,9 @@ interface MedicalInfoFormProps {
 const MedicalInfoForm = ({ initialData, onChange }: MedicalInfoFormProps) => {
   const [data, setData] = useState<MedicalInfo>(initialData);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+  ) => {
     const { name, value } = e.target;
     const updatedData = { ...data, [name]: value };
     setData(updatedData);
@@ -29,7 +31,7 @@ const MedicalInfoForm = ({ initialData, onChange }: MedicalInfoFormProps) => {
             id="bloodType"
             name="bloodType"
             value={data.bloodType}
-            onChange={handleChange as React.ChangeEvent<HTMLSelectElement>}
+            onChange={handleChange}
             className="resq-input h-10 px-3"
           >
             <option value="">Select Blood Type</option>
