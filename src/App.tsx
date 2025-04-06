@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Setup from "./pages/Setup";
 import Profile from "./pages/Profile";
 import Emergency from "./pages/Emergency";
+import Header from "./components/Header";
 
 const queryClient = new QueryClient();
 
@@ -16,15 +17,20 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      <Sonner position="top-center" closeButton theme="light" />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Welcome />} />
-          <Route path="/setup" element={<Setup />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/emergency/:profileId" element={<Emergency />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="min-h-screen flex flex-col">
+          <Header />
+          <main className="flex-1">
+            <Routes>
+              <Route path="/" element={<Welcome />} />
+              <Route path="/setup" element={<Setup />} />
+              <Route path="/profile" element={<Profile />} />
+              <Route path="/emergency/:profileId" element={<Emergency />} />
+              <Route path="*" element={<NotFound />} />
+            </Routes>
+          </main>
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
