@@ -1,4 +1,3 @@
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from './ui/button';
@@ -6,6 +5,7 @@ import { Input } from './ui/input';
 import { Label } from './ui/label';
 import { toast } from 'sonner';
 import { Eye, EyeOff, LogIn, UserPlus } from 'lucide-react';
+import { useLanguage } from '../hooks/useLanguage';
 
 type AuthMode = 'login' | 'register';
 
@@ -17,6 +17,7 @@ const AuthForm = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
+  const { t } = useLanguage();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -27,17 +28,17 @@ const AuthForm = () => {
         // In a real app, we would authenticate with a backend
         // For now, we'll simulate a successful login
         localStorage.setItem('user', JSON.stringify({ email, name: email.split('@')[0] }));
-        toast.success('Login successful!');
+        toast.success(t('auth.loginSuccess'));
         navigate('/setup');
       } else {
         // In a real app, we would register the user with a backend
         localStorage.setItem('user', JSON.stringify({ email, name }));
-        toast.success('Registration successful!');
+        toast.success(t('auth.registerSuccess'));
         navigate('/setup');
       }
     } catch (error) {
       console.error('Authentication error:', error);
-      toast.error(mode === 'login' ? 'Login failed' : 'Registration failed');
+      toast.error(mode === 'login' ? t('auth.loginFailed') : t('auth.registerFailed'));
     } finally {
       setIsLoading(false);
     }
@@ -51,46 +52,46 @@ const AuthForm = () => {
     <div className="bg-white rounded-xl shadow-md p-6 border border-resq-100 max-w-md w-full mx-auto">
       <div className="mb-6 text-center">
         <h2 className="text-2xl font-bold text-resq-800 mb-2">
-          {mode === 'login' ? 'Welcome Back' : 'Create Account'}
+          {mode === 'login' ? t('auth.welcomeBack') : t('auth.createAccount')}
         </h2>
         <p className="text-muted-foreground">
           {mode === 'login' 
-            ? 'Log in to access your emergency profile' 
-            : 'Register to create your emergency profile'}
+            ? t('auth.loginDescription')
+            : t('auth.registerDescription')}
         </p>
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
         {mode === 'register' && (
           <div>
-            <Label htmlFor="name">Full Name</Label>
+            <Label htmlFor="name">{t('auth.fullName')}</Label>
             <Input
               id="name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
               className="resq-input mt-1"
-              placeholder="Your full name"
+              placeholder={t('auth.fullNamePlaceholder')}
               required
             />
           </div>
         )}
 
         <div>
-          <Label htmlFor="email">Email</Label>
+          <Label htmlFor="email">{t('auth.email')}</Label>
           <Input
             id="email"
             type="email"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="resq-input mt-1"
-            placeholder="your@email.com"
+            placeholder={t('auth.emailPlaceholder')}
             required
           />
         </div>
 
         <div>
-          <Label htmlFor="password">Password</Label>
+          <Label htmlFor="password">{t('auth.password')}</Label>
           <div className="relative mt-1">
             <Input
               id="password"
@@ -98,7 +99,7 @@ const AuthForm = () => {
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               className="resq-input pr-10"
-              placeholder="••••••••"
+              placeholder={t('auth.passwordPlaceholder')}
               required
             />
             <button
@@ -117,16 +118,16 @@ const AuthForm = () => {
           disabled={isLoading}
         >
           {isLoading ? (
-            'Processing...'
+            t('common.loading')
           ) : mode === 'login' ? (
             <>
               <LogIn className="mr-2 h-4 w-4" />
-              Log In
+              {t('auth.login')}
             </>
           ) : (
             <>
               <UserPlus className="mr-2 h-4 w-4" />
-              Sign Up
+              {t('auth.signUp')}
             </>
           )}
         </Button>
@@ -134,13 +135,13 @@ const AuthForm = () => {
 
       <div className="mt-6 text-center">
         <p className="text-sm text-muted-foreground">
-          {mode === 'login' ? "Don't have an account?" : "Already have an account?"}
+          {mode === 'login' ? t('auth.noAccount') : t('auth.haveAccount')}
           <button
             type="button"
             onClick={toggleMode}
             className="ml-1 text-resq-600 hover:text-resq-700 hover:underline font-medium"
           >
-            {mode === 'login' ? 'Sign up' : 'Log in'}
+            {mode === 'login' ? t('auth.signUp') : t('auth.login')}
           </button>
         </p>
       </div>

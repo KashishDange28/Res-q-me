@@ -1,12 +1,13 @@
-
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { Button } from "../components/ui/button";
 import { Heart, Phone } from "lucide-react";
 import { EmergencyProfile } from "../types";
 import { getProfile } from "../utils/storage";
+import { useTranslation } from 'react-i18next';
 
 const Emergency = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<EmergencyProfile | null>(null);
   const { profileId } = useParams();
 
@@ -22,8 +23,8 @@ const Emergency = () => {
       <div className="min-h-screen flex flex-col items-center justify-center bg-red-50 p-6">
         <div className="text-center">
           <Heart className="h-12 w-12 text-red-500 mx-auto mb-4" />
-          <h1 className="text-2xl font-bold mb-2">Emergency Information</h1>
-          <p className="text-gray-600">No emergency profile found.</p>
+          <h1 className="text-2xl font-bold mb-2">{t('emergency.title')}</h1>
+          <p className="text-gray-600">{t('emergency.noProfile')}</p>
         </div>
       </div>
     );
@@ -34,7 +35,7 @@ const Emergency = () => {
       <div className="bg-red-500 text-white py-4 px-6 shadow-md">
         <div className="flex items-center justify-center">
           <Heart className="h-6 w-6 mr-2" />
-          <h1 className="text-xl font-bold">EMERGENCY INFORMATION</h1>
+          <h1 className="text-xl font-bold">{t('emergency.header')}</h1>
         </div>
       </div>
       
@@ -43,7 +44,7 @@ const Emergency = () => {
           <h2 className="text-xl font-bold mb-2">{profile.fullName}</h2>
           {profile.dateOfBirth && (
             <p className="text-gray-600 text-sm mb-2">
-              Born: {new Date(profile.dateOfBirth).toLocaleDateString()}
+              {t('emergency.born')}: {new Date(profile.dateOfBirth).toLocaleDateString()}
             </p>
           )}
         </div>
@@ -53,32 +54,32 @@ const Emergency = () => {
           profile.medicalInfo.conditions || 
           profile.medicalInfo.medications) && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-4">
-            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">Medical Information</h3>
+            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">{t('emergency.medicalInfo')}</h3>
             
             {profile.medicalInfo.bloodType && (
               <div className="mb-3">
-                <p className="text-sm font-semibold">Blood Type</p>
+                <p className="text-sm font-semibold">{t('emergency.medical.bloodType')}</p>
                 <p className="text-lg">{profile.medicalInfo.bloodType}</p>
               </div>
             )}
             
             {profile.medicalInfo.allergies && (
               <div className="mb-3">
-                <p className="text-sm font-semibold">Allergies</p>
+                <p className="text-sm font-semibold">{t('emergency.medical.allergies')}</p>
                 <p className="bg-red-50 p-2 rounded border border-red-100">{profile.medicalInfo.allergies}</p>
               </div>
             )}
             
             {profile.medicalInfo.conditions && (
               <div className="mb-3">
-                <p className="text-sm font-semibold">Medical Conditions</p>
+                <p className="text-sm font-semibold">{t('emergency.medical.conditions')}</p>
                 <p>{profile.medicalInfo.conditions}</p>
               </div>
             )}
             
             {profile.medicalInfo.medications && (
               <div>
-                <p className="text-sm font-semibold">Medications</p>
+                <p className="text-sm font-semibold">{t('emergency.medical.medications')}</p>
                 <p>{profile.medicalInfo.medications}</p>
               </div>
             )}
@@ -87,7 +88,7 @@ const Emergency = () => {
 
         {profile.contacts.length > 0 && (
           <div className="bg-white rounded-lg shadow-md p-6 mb-4">
-            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">Emergency Contacts</h3>
+            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">{t('emergency.contacts')}</h3>
             
             <div className="space-y-3">
               {profile.contacts.map((contact) => (
@@ -112,15 +113,15 @@ const Emergency = () => {
         
         {profile.notes && (
           <div className="bg-white rounded-lg shadow-md p-6">
-            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">Additional Notes</h3>
+            <h3 className="font-bold uppercase text-red-600 text-sm mb-3">{t('emergency.notes')}</h3>
             <p className="whitespace-pre-line">{profile.notes}</p>
           </div>
         )}
       </div>
       
       <div className="py-8 text-center text-xs text-gray-500">
-        <p>This is emergency medical information for first responders</p>
-        <p className="mt-1">Powered by ResQMe</p>
+        <p>{t('emergency.footer.description')}</p>
+        <p className="mt-1">{t('emergency.footer.poweredBy')}</p>
       </div>
     </div>
   );

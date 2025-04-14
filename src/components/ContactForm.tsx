@@ -1,10 +1,10 @@
-
 import { useState } from "react";
 import { Button } from "../components/ui/button";
 import { Input } from "../components/ui/input";
 import { Label } from "../components/ui/label";
 import { EmergencyContact } from "../types";
 import { Trash } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 interface ContactFormProps {
   contacts: EmergencyContact[];
@@ -12,6 +12,8 @@ interface ContactFormProps {
 }
 
 const ContactForm = ({ contacts, onChange }: ContactFormProps) => {
+  const { t } = useTranslation();
+
   const addContact = () => {
     const newContact: EmergencyContact = {
       id: `contact_${Date.now()}`,
@@ -35,73 +37,58 @@ const ContactForm = ({ contacts, onChange }: ContactFormProps) => {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
+      <h3 className="text-lg font-medium">{t('contactForm.contactInfo')}</h3>
       {contacts.length === 0 ? (
-        <div className="text-center py-4 text-muted-foreground">
-          No emergency contacts added
-        </div>
+        <p className="text-sm text-muted-foreground">{t('contactForm.noContacts')}</p>
       ) : (
-        contacts.map(contact => (
-          <div key={contact.id} className="p-4 rounded-lg border border-resq-100 bg-white">
-            <div className="flex justify-between items-start">
-              <h4 className="font-medium text-sm text-resq-600 mb-2">Contact Information</h4>
-              <Button 
-                variant="ghost" 
-                size="sm" 
-                className="h-8 w-8 p-0 text-muted-foreground hover:text-destructive"
+        contacts.map((contact, index) => (
+          <div key={index} className="space-y-4 p-4 border rounded-lg">
+            <div className="flex justify-between items-center">
+              <h4 className="font-medium">{contact.name}</h4>
+              <Button
+                variant="ghost"
+                size="sm"
                 onClick={() => removeContact(contact.id)}
               >
-                <Trash className="h-4 w-4" />
-                <span className="sr-only">Remove contact</span>
+                {t('contactForm.removeContact')}
               </Button>
             </div>
-            
-            <div className="space-y-4">
-              <div>
-                <Label htmlFor={`name_${contact.id}`}>Full Name</Label>
+            <div className="grid gap-4">
+              <div className="space-y-2">
+                <Label htmlFor={`name-${index}`}>{t('contactForm.fullName')}</Label>
                 <Input
-                  id={`name_${contact.id}`}
+                  id={`name-${index}`}
                   value={contact.name}
                   onChange={(e) => updateContact(contact.id, "name", e.target.value)}
-                  className="resq-input mt-1"
-                  placeholder="John Doe"
+                  placeholder={t('contactForm.namePlaceholder')}
                 />
               </div>
-              
-              <div>
-                <Label htmlFor={`relationship_${contact.id}`}>Relationship</Label>
+              <div className="space-y-2">
+                <Label htmlFor={`relationship-${index}`}>{t('contactForm.relationship')}</Label>
                 <Input
-                  id={`relationship_${contact.id}`}
+                  id={`relationship-${index}`}
                   value={contact.relationship}
                   onChange={(e) => updateContact(contact.id, "relationship", e.target.value)}
-                  className="resq-input mt-1"
-                  placeholder="Spouse, Parent, Friend, etc."
+                  placeholder={t('contactForm.relationshipPlaceholder')}
                 />
               </div>
-              
-              <div>
-                <Label htmlFor={`phone_${contact.id}`}>Phone Number</Label>
+              <div className="space-y-2">
+                <Label htmlFor={`phone-${index}`}>{t('contactForm.phoneNumber')}</Label>
                 <Input
-                  id={`phone_${contact.id}`}
+                  id={`phone-${index}`}
+                  type="tel"
                   value={contact.phone}
                   onChange={(e) => updateContact(contact.id, "phone", e.target.value)}
-                  className="resq-input mt-1"
-                  placeholder="(555) 123-4567"
-                  type="tel"
+                  placeholder={t('contactForm.phonePlaceholder')}
                 />
               </div>
             </div>
           </div>
         ))
       )}
-
-      <Button 
-        type="button" 
-        variant="outline" 
-        className="w-full border-dashed border-resq-200 text-resq-600 hover:text-resq-700 hover:bg-resq-50"
-        onClick={addContact}
-      >
-        + Add Emergency Contact
+      <Button onClick={addContact} className="w-full">
+        {t('contactForm.addContact')}
       </Button>
     </div>
   );

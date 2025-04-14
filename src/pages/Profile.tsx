@@ -1,4 +1,3 @@
-
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "../components/ui/button";
@@ -7,8 +6,10 @@ import QRCodeDisplay from "../components/QRCodeDisplay";
 import { EmergencyProfile } from "../types";
 import { getProfile } from "../utils/storage";
 import { Edit3 } from "lucide-react";
+import { useTranslation } from 'react-i18next';
 
 const Profile = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<EmergencyProfile | null>(null);
   const navigate = useNavigate();
 
@@ -22,7 +23,7 @@ const Profile = () => {
   }, [navigate]);
 
   if (!profile) {
-    return <div className="resq-container">Loading profile...</div>;
+    return <div className="resq-container">{t('common.loading')}</div>;
   }
 
   // Get the base URL for QR code creation
@@ -33,7 +34,7 @@ const Profile = () => {
       <Header />
       <div className="resq-container">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-2xl font-bold text-resq-800">Emergency Profile</h1>
+          <h1 className="text-2xl font-bold text-resq-800">{t('profile.title')}</h1>
           <Button 
             variant="ghost" 
             size="sm" 
@@ -41,7 +42,7 @@ const Profile = () => {
             className="flex items-center gap-1 text-resq-600 hover:text-resq-700"
           >
             <Edit3 className="h-4 w-4" />
-            Edit
+            {t('profile.editProfile')}
           </Button>
         </div>
         
@@ -51,63 +52,57 @@ const Profile = () => {
         
         <div className="space-y-6">
           <div className="resq-card">
-            <h2 className="text-lg font-semibold text-resq-700 mb-3">Personal Information</h2>
+            <h2 className="text-lg font-semibold text-resq-700 mb-3">{t('profile.sections.personalInfo')}</h2>
             <div className="space-y-2">
               <div>
-                <p className="text-sm text-muted-foreground">Full Name</p>
+                <p className="text-sm text-muted-foreground">{t('profile.personal.fullName')}</p>
                 <p className="font-medium">{profile.fullName}</p>
               </div>
               
               {profile.dateOfBirth && (
                 <div>
-                  <p className="text-sm text-muted-foreground">Date of Birth</p>
+                  <p className="text-sm text-muted-foreground">{t('profile.personal.dateOfBirth')}</p>
                   <p className="font-medium">{new Date(profile.dateOfBirth).toLocaleDateString()}</p>
                 </div>
               )}
             </div>
           </div>
           
-          <div className="resq-card">
-            <h2 className="text-lg font-semibold text-resq-700 mb-3">Medical Information</h2>
-            
-            {profile.medicalInfo.bloodType && (
-              <div className="mb-3">
-                <p className="text-sm text-muted-foreground">Blood Type</p>
-                <p className="font-medium">{profile.medicalInfo.bloodType}</p>
+          {profile.medicalInfo.bloodType && (
+            <div className="resq-card">
+              <h2 className="text-lg font-semibold text-resq-700 mb-3">{t('profile.sections.medicalInfo')}</h2>
+              <div className="space-y-2">
+                <div>
+                  <p className="text-sm text-muted-foreground">{t('profile.medical.bloodType')}</p>
+                  <p className="font-medium">{profile.medicalInfo.bloodType}</p>
+                </div>
+                
+                {profile.medicalInfo.allergies && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t('profile.medical.allergies')}</p>
+                    <p className="font-medium">{profile.medicalInfo.allergies}</p>
+                  </div>
+                )}
+                
+                {profile.medicalInfo.conditions && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t('profile.medical.conditions')}</p>
+                    <p className="font-medium">{profile.medicalInfo.conditions}</p>
+                  </div>
+                )}
+                
+                {profile.medicalInfo.medications && (
+                  <div>
+                    <p className="text-sm text-muted-foreground">{t('profile.medical.medications')}</p>
+                    <p className="font-medium">{profile.medicalInfo.medications}</p>
+                  </div>
+                )}
               </div>
-            )}
-            
-            {profile.medicalInfo.allergies && (
-              <div className="mb-3">
-                <p className="text-sm text-muted-foreground">Allergies</p>
-                <p className="whitespace-pre-line">{profile.medicalInfo.allergies}</p>
-              </div>
-            )}
-            
-            {profile.medicalInfo.conditions && (
-              <div className="mb-3">
-                <p className="text-sm text-muted-foreground">Medical Conditions</p>
-                <p className="whitespace-pre-line">{profile.medicalInfo.conditions}</p>
-              </div>
-            )}
-            
-            {profile.medicalInfo.medications && (
-              <div>
-                <p className="text-sm text-muted-foreground">Medications</p>
-                <p className="whitespace-pre-line">{profile.medicalInfo.medications}</p>
-              </div>
-            )}
-            
-            {!profile.medicalInfo.bloodType && 
-             !profile.medicalInfo.allergies && 
-             !profile.medicalInfo.conditions && 
-             !profile.medicalInfo.medications && (
-              <p className="text-muted-foreground text-sm italic">No medical information added</p>
-            )}
-          </div>
+            </div>
+          )}
           
           <div className="resq-card">
-            <h2 className="text-lg font-semibold text-resq-700 mb-3">Emergency Contacts</h2>
+            <h2 className="text-lg font-semibold text-resq-700 mb-3">{t('profile.sections.emergencyContacts')}</h2>
             
             {profile.contacts.length > 0 ? (
               <div className="space-y-4">
@@ -127,13 +122,13 @@ const Profile = () => {
                 ))}
               </div>
             ) : (
-              <p className="text-muted-foreground text-sm italic">No emergency contacts added</p>
+              <p className="text-muted-foreground text-sm italic">{t('profile.noContacts')}</p>
             )}
           </div>
           
           {profile.notes && (
             <div className="resq-card">
-              <h2 className="text-lg font-semibold text-resq-700 mb-3">Additional Notes</h2>
+              <h2 className="text-lg font-semibold text-resq-700 mb-3">{t('profile.sections.additionalNotes')}</h2>
               <p className="whitespace-pre-line">{profile.notes}</p>
             </div>
           )}

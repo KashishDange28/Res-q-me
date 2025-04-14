@@ -9,8 +9,10 @@ import ContactForm from "../components/ContactForm";
 import { EmergencyProfile } from "../types";
 import { saveProfile, getProfile, createEmptyProfile } from "../utils/storage";
 import { toast } from "sonner";
+import { useTranslation } from 'react-i18next';
 
 const Setup = () => {
+  const { t } = useTranslation();
   const [profile, setProfile] = useState<EmergencyProfile>(createEmptyProfile());
   const [activeTab, setActiveTab] = useState<'personal' | 'medical' | 'contacts'>('personal');
   const navigate = useNavigate();
@@ -28,18 +30,18 @@ const Setup = () => {
 
   const handleSave = () => {
     if (!profile.fullName.trim()) {
-      toast.error("Please enter your name before saving");
+      toast.error(t('setup.error.nameRequired'));
       return;
     }
     
     saveProfile(profile);
-    toast.success("Profile saved successfully!");
+    toast.success(t('setup.success.saved'));
     navigate("/profile");
   };
 
   return (
     <div className="resq-container pb-20">
-      <h1 className="text-2xl font-bold mb-6 text-resq-800">Emergency Profile Setup</h1>
+      <h1 className="text-2xl font-bold mb-6 text-resq-800">{t('setup.title')}</h1>
       
       <div className="flex border-b border-resq-100 mb-6">
         <button
@@ -50,7 +52,7 @@ const Setup = () => {
               : 'text-muted-foreground'
           }`}
         >
-          Personal
+          {t('setup.tabs.personal')}
         </button>
         
         <button
@@ -61,7 +63,7 @@ const Setup = () => {
               : 'text-muted-foreground'
           }`}
         >
-          Medical
+          {t('setup.tabs.medical')}
         </button>
         
         <button
@@ -72,25 +74,25 @@ const Setup = () => {
               : 'text-muted-foreground'
           }`}
         >
-          Contacts
+          {t('setup.tabs.contacts')}
         </button>
       </div>
 
       {activeTab === 'personal' && (
         <div className="space-y-4">
           <div>
-            <Label htmlFor="fullName">Full Name</Label>
+            <Label htmlFor="fullName">{t('setup.personal.fullName')}</Label>
             <Input
               id="fullName"
               value={profile.fullName}
               onChange={(e) => updateProfile('fullName', e.target.value)}
               className="resq-input mt-1"
-              placeholder="Your full name"
+              placeholder={t('setup.personal.fullNamePlaceholder')}
             />
           </div>
           
           <div>
-            <Label htmlFor="dateOfBirth">Date of Birth</Label>
+            <Label htmlFor="dateOfBirth">{t('setup.personal.dateOfBirth')}</Label>
             <Input
               id="dateOfBirth"
               type="date"
@@ -101,13 +103,13 @@ const Setup = () => {
           </div>
           
           <div>
-            <Label htmlFor="notes">Additional Notes</Label>
+            <Label htmlFor="notes">{t('setup.personal.notes')}</Label>
             <Textarea
               id="notes"
               value={profile.notes}
               onChange={(e) => updateProfile('notes', e.target.value)}
               className="resq-input mt-1 resize-none h-32"
-              placeholder="Any additional information that might be helpful in an emergency"
+              placeholder={t('setup.personal.notesPlaceholder')}
             />
           </div>
         </div>
@@ -127,42 +129,13 @@ const Setup = () => {
         />
       )}
 
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-resq-100 p-4">
-        <div className="container max-w-md mx-auto flex gap-3">
-          {activeTab === 'personal' ? (
-            <Button variant="outline" className="w-1/2" onClick={() => navigate('/')}>
-              Cancel
-            </Button>
-          ) : (
-            <Button 
-              variant="outline" 
-              className="w-1/2" 
-              onClick={() => {
-                setActiveTab(activeTab === 'medical' ? 'personal' : 'medical');
-              }}
-            >
-              Back
-            </Button>
-          )}
-          
-          {activeTab === 'contacts' ? (
-            <Button 
-              className="w-1/2 bg-resq-500 hover:bg-resq-600" 
-              onClick={handleSave}
-            >
-              Save Profile
-            </Button>
-          ) : (
-            <Button 
-              className="w-1/2 bg-resq-500 hover:bg-resq-600" 
-              onClick={() => {
-                setActiveTab(activeTab === 'personal' ? 'medical' : 'contacts');
-              }}
-            >
-              Continue
-            </Button>
-          )}
-        </div>
+      <div className="mt-8">
+        <Button 
+          onClick={handleSave}
+          className="w-full bg-resq-500 hover:bg-resq-600"
+        >
+          {t('setup.saveButton')}
+        </Button>
       </div>
     </div>
   );

@@ -1,10 +1,10 @@
-
 import { useEffect, useRef, useState } from 'react';
 import QRCode from 'qrcode';
 import { EmergencyProfile } from '../types';
 import { Button } from '../components/ui/button';
 import { Download, Share2, ExternalLink } from 'lucide-react';
 import { useIsMobile } from '../hooks/use-mobile';
+import { useTranslation } from 'react-i18next';
 
 interface QRCodeDisplayProps {
   profile: EmergencyProfile;
@@ -17,6 +17,7 @@ const QRCodeDisplay = ({ profile, baseUrl }: QRCodeDisplayProps) => {
   const profileId = profile.fullName.replace(/\s+/g, '-').toLowerCase();
   const emergencyUrl = `${baseUrl}/emergency/${profileId}`;
   const isMobile = useIsMobile();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (canvasRef.current) {
@@ -103,44 +104,25 @@ const QRCodeDisplay = ({ profile, baseUrl }: QRCodeDisplayProps) => {
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="bg-gradient-to-b from-white to-resq-50 p-4 rounded-xl shadow-md border border-resq-100">
+    <div className="flex flex-col items-center space-y-4">
+      <p className="text-sm text-gray-600 dark:text-gray-400">
+        {t('qrCode.scanPrompt')}
+      </p>
+      <div className="p-4 bg-white rounded-lg shadow-md">
         <canvas ref={canvasRef} />
       </div>
-      
-      <p className="mt-4 text-sm text-center text-muted-foreground">
-        Scan this QR code to access emergency information
-      </p>
-      
-      <div className="flex flex-wrap gap-3 mt-4 justify-center">
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={downloadQRCode}
-          className="flex items-center gap-2 bg-white hover:bg-resq-50"
-        >
-          <Download className="h-4 w-4 text-resq-600" />
-          Download
+      <div className="flex space-x-4">
+        <Button onClick={downloadQRCode}>
+          <Download className="w-4 h-4 mr-2" />
+          {t('qrCode.download')}
         </Button>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
-          onClick={shareQRCode}
-          className="flex items-center gap-2 bg-white hover:bg-resq-50"
-        >
-          <Share2 className="h-4 w-4 text-resq-600" />
-          Share
+        <Button onClick={shareQRCode}>
+          <Share2 className="w-4 h-4 mr-2" />
+          {t('qrCode.share')}
         </Button>
-        
-        <Button 
-          variant="default" 
-          size="sm" 
-          onClick={openDirectLink}
-          className="flex items-center gap-2 bg-resq-500 hover:bg-resq-600 text-white"
-        >
-          <ExternalLink className="h-4 w-4" />
-          Open Direct Link
+        <Button onClick={openDirectLink}>
+          <ExternalLink className="w-4 h-4 mr-2" />
+          {t('qrCode.openDirectLink')}
         </Button>
       </div>
     </div>
